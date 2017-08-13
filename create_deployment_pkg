@@ -8,6 +8,6 @@ if [[ -d $OUTPUT_DIR ]]; then
     exit 1
 fi
 
-mkdir "$OUTOUT_DIR"
+mkdir "$OUTPUT_DIR"
 rsync -a "$DEPENDENCIES/" "$OUTPUT_DIR"
-rsync -a *.py "$OUTPUT_DIR"
+rsync -a commute_weather/ "$OUTPUT_DIR"
