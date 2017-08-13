@@ -30,10 +30,9 @@ _DAY_BEGIN = datetime.time(int(os.environ['DAY_BEGIN_HOUR']), tzinfo=_TIMEZONE)
 _DAY_END = datetime.time(int(os.environ['DAY_END_HOUR']), tzinfo=_TIMEZONE)
 _ROUTE = json.loads(util.kms_decrypt_str(os.environ['ROUTE']))
 
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout,
-                    format='[%(asctime)s:%(name)s:%(levelname)s] %(message)s')
 logging.getLogger('chump').setLevel(logging.INFO)  # chump is very verbose
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def _wrapper(json_: dict) -> dict:
