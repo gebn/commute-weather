@@ -3,6 +3,7 @@ import logging
 import sys
 import os
 import datetime
+import json
 
 import chump
 import requests
@@ -19,6 +20,7 @@ _TIMEZONE = pytz.timezone(os.environ['TIMEZONE'])
 _NOW = datetime.datetime.now(_TIMEZONE)
 
 _DARK_SKY_SECRET_KEY = util.kms_decrypt_str(os.environ['DARK_SKY_SECRET_KEY'])
+
 _PUSHOVER_APP_TOKEN = util.kms_decrypt_str(os.environ['PUSHOVER_APP_TOKEN'])
 _PUSHOVER_USER_KEY = util.kms_decrypt_str(os.environ['PUSHOVER_USER_KEY'])
 
@@ -26,7 +28,7 @@ _PUSHOVER_USER_KEY = util.kms_decrypt_str(os.environ['PUSHOVER_USER_KEY'])
 _SCORE_THRESHOLD = float(os.environ['SCORE_THRESHOLD'])
 _DAY_BEGIN = datetime.time(int(os.environ['DAY_BEGIN_HOUR']), tzinfo=_TIMEZONE)
 _DAY_END = datetime.time(int(os.environ['DAY_END_HOUR']), tzinfo=_TIMEZONE)
-_ROUTE = []
+_ROUTE = json.loads(util.kms_decrypt_str(os.environ['ROUTE']))
 
 logging.basicConfig(level=logging.DEBUG, stream=sys.stdout,
                     format='[%(asctime)s:%(name)s:%(levelname)s] %(message)s')
