@@ -48,7 +48,7 @@ def main() -> int:
                     session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
                 _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
              for lat, long_ in _ROUTE])
-        logger.debug('Result: %s', umbrella)
+        logger.debug('Overall result: %s', umbrella)
     except RuntimeError as e:
         user.send_message('Weather job failed: {0}'.format(e),
                           priority=chump.HIGH)

@@ -121,5 +121,5 @@ def assess_location(json_: dict, now: datetime.datetime, begin: datetime.time,
                util.is_between(sample.time, begin, end)]
     logger.debug('%d relevant samples', len(samples))
     result = any([sample.umbrella_score >= threshold for sample in samples])
-    logger.debug('Result: %s', result)
+    logger.debug('Location result: %s', result)
     return result
