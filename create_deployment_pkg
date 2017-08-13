@@ -4,7 +4,7 @@ readonly OUTPUT_DIR="deploy"
 readonly DEPENDENCIES="$VIRTUAL_ENV/lib/python3.6/site-packages"
 
 if [[ -d $OUTPUT_DIR ]]; then
-    echo "Output dir already exists"
+    echo "Output dir already exists" >&2
     exit 1
 fi
 
