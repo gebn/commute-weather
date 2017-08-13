@@ -101,6 +101,8 @@ def assess_location(json_: dict, now: datetime.datetime, begin: datetime.time,
     :param json_: The API response JSON. 
     :return: True if an umbrella is required, false otherwise.
     """
+    logger.debug('Assessing location (%f, %f)', json_['latitude'],
+                 json_['longitude'])
     samples = [PrecipitationSample.from_json(sample)
                for sample in json_['hourly']['data']]
     logger.debug('%d available samples', len(samples))
