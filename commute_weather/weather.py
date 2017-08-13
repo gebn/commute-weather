@@ -70,6 +70,7 @@ def main() -> int:
     return 0
 
 
+# noinspection PyUnusedLocal
 def lambda_handler(event, context) -> int:
     """
     AWS Lambda entry point.
@@ -80,8 +81,6 @@ def lambda_handler(event, context) -> int:
     :return: The script exit code. 
     """
     logger.info('Event: %s', event)
-    logger.info('AWS Request ID: %s', context.aws_request_id)
-    logger.debug('Running with %s MiB of memory', context.memory_limit_in_mb)
     return main()
 
 
