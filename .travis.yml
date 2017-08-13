@@ -5,7 +5,6 @@ python:
 - 3.6
 script:
 - ./create_deployment_pkg
-- ls -lhR
 deploy:
   provider: lambda
   function_name: commute-weather
