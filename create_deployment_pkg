@@ -14,5 +14,5 @@ rsync -a "$DEPENDENCIES/" "$OUTPUT_DIR"
 rsync -a commute_weather/ "$OUTPUT_DIR"
 du -sh "$OUTPUT_DIR"
 
-zip -r -9 "$OUTPUT_ZIP" "$OUTPUT_DIR"
+zip -qr -9 "$OUTPUT_ZIP" "$OUTPUT_DIR"
 ls -lh "$OUTPUT_ZIP"
