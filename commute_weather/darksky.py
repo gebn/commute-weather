@@ -75,7 +75,8 @@ def get_location(session: requests.Session, key: str, latitude: float,
     """
     Retrieve the API result for a given location.
 
-    :param session: A requests session to use to make the request. 
+    :param session: A requests session to use to make the request.
+    :param key: The Dark Sky API key to use when making the request.
     :param latitude: The latitude of the location.
     :param longitude: The longitude of the location.
     :return: The request's response object.
@@ -98,7 +99,12 @@ def assess_location(json_: dict, now: datetime.datetime, begin: datetime.time,
     Given a location's weather forecast, calculate whether an umbrella is
     necessary.
 
-    :param json_: The API response JSON. 
+    :param json_: The API response JSON.
+    :param now: The time to regard as right now.
+    :param begin: When the working day begins.
+    :param end: When the working day ends.
+    :param threshold: The precipitation score at or above which an umbrella is
+                      required.
     :return: True if an umbrella is required, false otherwise.
     """
     logger.debug('Assessing location (%f, %f)', json_['latitude'],
