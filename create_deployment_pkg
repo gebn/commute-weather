@@ -1,7 +1,7 @@
 #!/bin/bash
 
-readonly OUTPUT_DIR="deploy"
-readonly OUTPUT_ZIP="deploy.zip"  # must match .travis.yml
+readonly OUTPUT_DIR="$VIRTUAL_ENV/deploy"
+readonly OUTPUT_ZIP="$VIRTUAL_ENV/deploy.zip"  # must match .travis.yml
 readonly DEPENDENCIES="$VIRTUAL_ENV/lib/python3.6/site-packages"
 
 if [[ -d $OUTPUT_DIR ]]; then
@@ -14,5 +14,7 @@ rsync -a "$DEPENDENCIES/" "$OUTPUT_DIR"
 rsync -a commute_weather/ "$OUTPUT_DIR"
 du -sh "$OUTPUT_DIR"
 
-zip -qr -9 "$OUTPUT_ZIP" "$OUTPUT_DIR"
+cd "$OUTPUT_DIR"  # cannot have container dir in zip
+zip -qr9 "$OUTPUT_ZIP" .
+cd - > /dev/null
 ls -lh "$OUTPUT_ZIP"
