@@ -10,6 +10,7 @@ import util
 _ENDPOINT_FMT = 'https://api.darksky.net/forecast/{key}/{lat},{long}'
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class PrecipitationSample:

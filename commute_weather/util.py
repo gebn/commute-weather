@@ -9,6 +9,8 @@ from typing import Callable
 import requests
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 _KMS = boto3.client('kms')
 
 
