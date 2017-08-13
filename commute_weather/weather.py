@@ -35,11 +35,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def _wrapper(json_: dict) -> dict:
-    logger.debug('EXECUTING _TMP')
-    return json_
-
-
 def main() -> int:
     assert len(_ROUTE) >= 1
 
@@ -49,8 +44,8 @@ def main() -> int:
     try:
         umbrella = any(
             [darksky.assess_location(
-                _wrapper(util.retry_loop(lambda: darksky.get_location(
-                    session, _DARK_SKY_SECRET_KEY, lat, long_)).json()),
+                util.retry_loop(lambda: darksky.get_location(
+                    session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
                 _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
              for lat, long_ in _ROUTE])
         logger.debug('Result: %s', umbrella)
