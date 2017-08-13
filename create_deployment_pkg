@@ -1,6 +1,7 @@
 #!/bin/bash
 
 readonly OUTPUT_DIR="deploy"
+readonly OUTPUT_ZIP="deploy.zip"  # must match .travis.yml
 readonly DEPENDENCIES="$VIRTUAL_ENV/lib/python3.6/site-packages"
 
 if [[ -d $OUTPUT_DIR ]]; then
@@ -11,3 +12,7 @@ fi
 mkdir "$OUTPUT_DIR"
 rsync -a "$DEPENDENCIES/" "$OUTPUT_DIR"
 rsync -a commute_weather/ "$OUTPUT_DIR"
+du -sh "$OUTPUT_DIR"
+
+zip -r -9 "$OUTPUT_ZIP" "$OUTPUT_DIR"
+ls -lh "$OUTPUT_ZIP"
