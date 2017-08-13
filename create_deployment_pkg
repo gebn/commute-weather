@@ -1,0 +1,13 @@
+#!/bin/bash
+
+readonly OUTPUT_DIR="deploy"
+readonly DEPENDENCIES="$VIRTUAL_ENV/lib/python3.6/site-packages"
+
+if [[ -d $OUTPUT_DIR ]]; then
+    echo "Output dir already exists"
+    exit 1
+fi
+
+mkdir "$OUTOUT_DIR"
+rsync -a "$DEPENDENCIES/" "$OUTPUT_DIR"
+rsync -a *.py "$OUTPUT_DIR"
