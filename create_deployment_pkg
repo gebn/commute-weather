@@ -1,10 +1,12 @@
 #!/bin/bash
 
-readonly OUTPUT_DIR="deploy"
-readonly OUTPUT_ZIP="deploy.zip"  # must match .travis.yml
+readonly WORKING_DIR="$PWD"
+readonly OUTPUT_DIR="/tmp/deploy"
+readonly OUTPUT_ZIP="/tmp/deploy.zip"  # must match .travis.yml
 readonly DEPENDENCIES="$VIRTUAL_ENV/lib/python3.6/site-packages"
 
-echo "Working directory: $PWD"
+echo "Working directory: $WORKING_DIR"
+echo "Virtual env: $VIRTUAL_ENV"
 
 if [[ -d $OUTPUT_DIR ]]; then
     echo "Output dir already exists" >&2
@@ -18,5 +20,5 @@ du -sh "$OUTPUT_DIR"
 
 cd "$OUTPUT_DIR"  # cannot have container dir in zip
 zip -qr9 "$OUTPUT_ZIP" .
-cd - > /dev/null
+cd "$WORKING_DIR"
 du -sh "$OUTPUT_ZIP"
