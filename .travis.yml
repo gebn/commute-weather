@@ -4,6 +4,7 @@ cache: pip
 python:
 - 3.6
 script:
+- df -h
 - ./create_deployment_pkg
 deploy:
   provider: lambda
