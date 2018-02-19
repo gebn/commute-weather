@@ -7,6 +7,9 @@ script:
 - ./create_deployment_pkg
 deploy:
   provider: lambda
+  edge:
+    source: gebn/dpl
+    branch: lambda-access-key-as-env-vars
   function_name: commute-weather
   description: Tells you each week day morning whether you need to take your umbrella
   region: us-east-1
