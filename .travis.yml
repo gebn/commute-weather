@@ -7,9 +7,6 @@ script:
 - ./create_deployment_pkg
 deploy:
   provider: lambda
-  edge:
-    source: gebn/dpl
-    branch: lambda-access-key-as-env-vars
   function_name: commute-weather
   description: Tells you each week day morning whether you need to take your umbrella
   region: us-east-1
@@ -20,5 +17,7 @@ deploy:
   zip: /dev/shm/deploy.zip
   timeout: 10
   memory_size: 128
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
   on:
     branch: latest
