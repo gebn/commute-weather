@@ -17,7 +17,5 @@ deploy:
   zip: /dev/shm/deploy.zip
   timeout: 10
   memory_size: 128
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
   on:
     branch: latest
