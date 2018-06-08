@@ -19,16 +19,16 @@ _TIMEZONE = pytz.timezone(os.environ['TIMEZONE'])
 # so we are consistent, even if this script's execution strides midnight
 _NOW = datetime.datetime.now(_TIMEZONE)
 
-_DARK_SKY_SECRET_KEY = util.kms_decrypt_str(os.environ['DARK_SKY_SECRET_KEY'])
+_DARK_SKY_SECRET_KEY = os.environ['DARK_SKY_SECRET_KEY']
 
-_PUSHOVER_APP_TOKEN = util.kms_decrypt_str(os.environ['PUSHOVER_APP_TOKEN'])
-_PUSHOVER_USER_KEY = util.kms_decrypt_str(os.environ['PUSHOVER_USER_KEY'])
+_PUSHOVER_APP_TOKEN = os.environ['PUSHOVER_APP_TOKEN']
+_PUSHOVER_USER_KEY = os.environ['PUSHOVER_USER_KEY']
 
 # at or above this, an umbrella will be recommended
 _SCORE_THRESHOLD = float(os.environ['SCORE_THRESHOLD'])
 _DAY_BEGIN = datetime.time(int(os.environ['DAY_BEGIN_HOUR']), tzinfo=_TIMEZONE)
 _DAY_END = datetime.time(int(os.environ['DAY_END_HOUR']), tzinfo=_TIMEZONE)
-_ROUTE = json.loads(util.kms_decrypt_str(os.environ['ROUTE']))
+_ROUTE = json.loads(os.environ['ROUTE'])
 
 logging.getLogger('chump').setLevel(logging.INFO)  # chump is very verbose
 logger = logging.getLogger(__name__)
