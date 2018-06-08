@@ -6,9 +6,9 @@ python:
 script:
 - ./create_deployment_pkg
 deploy:
-  provider: lambda
+- provider: lambda
   function_name: commute-weather
-  description: Tells you each week day morning whether you need to take your umbrella
+  description: Tells you whether you'll need an umbrella for a regular journey
   region: us-east-1
   role: arn:aws:iam::158438328645:role/service-role/commute-weather-role
   runtime: python3.6
@@ -19,3 +19,24 @@ deploy:
   memory_size: 128
   on:
     branch: latest
+- provider: lambda
+  function_name: commute-weather
+  description: Tells you whether you'll need an umbrella for a regular journey
+  region: us-east-1
+  role: arn:aws:iam::158438328645:role/service-role/commute-weather-role
+  runtime: python3.6
+  module_name: weather
+  handler_name: lambda_handler
+  zip: /dev/shm/deploy.zip
+  timeout: 10
+  publish: true
+  on:
+    tags: true
+- provider: releases
+  file: /dev/shm/deploy.zip
+  skip_cleanup: true
+  api_key:
+    secure: DCSy7szW2ilTZgnnhPwHWLrDuIudC2lQalTWb6BlSHjh+s68Uo6G97lt874lk/PINX3I5BJzlgoSvfQfOyiCBrOPGxDFAXhwrbc6HaneE78ihZdfPfjL2EPS71jPtz+H68Sr/herrgcBRZfeGpnShOKAJR4+Loa69XZ8TG9ZWG5YER92cE9C9s0Y+ujVmaLflrMgsNigMYrTaIpEqM2mHAq/VYj1KglT09FtwXbYDYxOx1Emph2HE+JqGz0grkxPIavmIgrAu6hoJzkKyA58yXQ0VucrQjcnuINUNMJoJw3guWFZ7QeQVvvVJHu/eqZ3JohO7WcVy9TD+95Uh6WVlVnquMYr82yC7C+sQ2LHjnKaCyk8b3eTLD2olbJIjeqXq0v009XNQCB0bZWhMwsme8G6A6Gq5xvf8GrwPR5JfAP9JaHjtK7N+yCCWJ21crjRyChi6GUdKIcSW4vvtSBt30+yZGQPBszP9PfEeCrWduawpS/xUn72m3AgCeE0cIEuoEoY7UtCcO+QolSeSPrUBu5ZvAppbRnLg6c4TpO51QLgE2HtkK++cXkplPqeN/0N1qN4DBMSuFXRxwv9T6trrB3vfVmwsxMIwRKd+u3BfjKD1Yn4QVoxj1CI3Zks1Kwq5E2Hn9EQmJPSkhLcoTWVodnrCXOpcthB+9jxxxFWtmA=
+  on:
+    repo: gebn/commute-weather
+    tags: true
