@@ -40,9 +40,10 @@ def main() -> None:
     """
     Executes the main bulk of this function.
 
-    :raises RuntimeException: If something goes wrong.
+    :raises RuntimeError: If something goes wrong.
     """
-    assert len(_ROUTE) >= 1
+    if len(_ROUTE) == 0:
+        raise RuntimeError('The route must contain at least one location')
 
     session = requests.session()
 
