@@ -64,9 +64,9 @@ class HourSample:
             json_['apparentTemperature'])
 
     def __str__(self) -> str:
-        return '{0}({1}, {2} mm, P(precip) = {3}, {4}°C)'.format(
+        return '{0}({1}, {2} mm, P(precip) = {3}, score = {4}, {5}°C)'.format(
             self.__class__.__name__, self.time, self.precip_intensity,
-            self.precip_probability, self.apparent_temp)
+            self.precip_probability, self.umbrella_score, self.apparent_temp)
 
 
 def location_hourly(session: requests.Session, key: str, latitude: float,

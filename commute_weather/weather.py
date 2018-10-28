@@ -78,17 +78,27 @@ def main() -> None:
     # and max temp calculation - laziness doesn't buy anything
     samples = list(samples)
 
-    umbrella = any(sample.umbrella_score >= _SCORE_THRESHOLD
-                   for sample in samples)
+    over_threshold = [sample for sample in samples
+                      if sample.umbrella_score >= _SCORE_THRESHOLD]
+    umbrella = len(over_threshold) > 0
+    logger.info('Umbrella required? %s', umbrella)
+    if umbrella:
+        logger.info('%d samples were over the threshold of %f',
+                    len(over_threshold), _SCORE_THRESHOLD)
+        # in case we say an umbrella is required, but it turns out not to be
+        for sample in over_threshold:
+            logger.debug(sample)
+
     temperatures = [sample.apparent_temp for sample in samples]
+    low = min(temperatures)
+    high = max(temperatures)
+    logger.info('Low: %.2f, High: %.2f', low, high)
 
     summary = 'You need to take your umbrella' \
         if umbrella else 'You don\'t need your umbrella!'
     message = {
         'app': _PUSHOVER_APP_TOKEN,
-        'body': f'{summary} '
-                f'(Low: {round(min(temperatures))}°C, '
-                f'High: {round(max(temperatures))}°C)',
+        'body': f'{summary} (Low: {round(low)}°C, High: {round(high)}°C)',
         'url': f'https://darksky.net/forecast/{_ROUTE[0][0]},{_ROUTE[0][1]}'
                f'/uk224/en'
     }
