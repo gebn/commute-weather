@@ -47,11 +47,11 @@ def main() -> None:
     session = requests.session()
 
     umbrella = any(
-        [darksky.assess_location(
+        darksky.assess_location(
             util.retry_loop(lambda: darksky.get_location(
                 session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
             _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
-         for lat, long_ in _ROUTE])
+        for lat, long_ in _ROUTE)
     logger.debug('Overall result: %s', umbrella)
 
     message = {
