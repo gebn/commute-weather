@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-from typing import Callable
 import logging
-import time
 import datetime
-import requests
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
