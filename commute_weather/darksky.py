@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import datetime
-
 import pytz
 import requests
 

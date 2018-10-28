@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+from typing import Callable
 import logging
 import time
 import datetime
-from typing import Callable
-
 import requests
 
 logger = logging.getLogger(__name__)
