@@ -39,31 +39,3 @@ def is_between(dt_: datetime.datetime, begin: datetime.time,
         return localised.time().replace(tzinfo=time_.tzinfo)
 
     return begin <= normalise_(dt_, begin) and normalise_(dt_, end) <= end
-
-
-def retry_loop(request: Callable[[], requests.Response], attempts: int = 3,
-               gap: float = 60) -> requests.Response:
-    """
-    Issue a request until it succeeds.
-    
-    :param request: A function that performs the request and returns the raw
-                    response object.
-    :param attempts: The number of attempts to make before giving up.
-    :param gap: The amount of time to wait between attempts in seconds.
-    :return: The successful response.
-    :raises RuntimeError: If the request failed on the `attempts`th attempt.
-    """
-    attempt = 0
-    response = None
-    while attempt < attempts:
-        response = request()
-        if response.status_code == requests.codes.ok:
-            logger.debug('Successfully retrieved %s', response.url)
-            return response
-        logger.warning('Failed to fetch %s; retrying in %fs...',
-                       response.url, gap)
-        attempt += 1
-        time.sleep(gap)
-    logger.error('Failed to fetch %s after %d attempts', response.url, attempts)
-    raise RuntimeError(
-        'Request failed after {0} attempts: {1}'.format(attempts, response))

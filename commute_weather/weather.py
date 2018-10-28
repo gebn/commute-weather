@@ -8,7 +8,6 @@ import json
 import requests
 import boto3
 
-import util
 import darksky
 
 
@@ -49,8 +48,8 @@ def main() -> None:
 
     umbrella = any(
         darksky.assess_location(
-            util.retry_loop(lambda: darksky.get_location(
-                session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
+            darksky.get_location(
+                session, _DARK_SKY_SECRET_KEY, lat, long_).json(),
             _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
         for lat, long_ in _ROUTE)
     logger.debug('Overall result: %s', umbrella)

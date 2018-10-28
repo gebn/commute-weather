@@ -79,9 +79,10 @@ def get_location(session: requests.Session, key: str, latitude: float,
     :param latitude: The latitude of the location.
     :param longitude: The longitude of the location.
     :return: The request's response object.
+    :raises requests.exceptions.HTTPError: If the request fails.
     """
     logger.debug('Asking for data for (%f, %f)', latitude, longitude)
-    return session.get(
+    response = session.get(
         _ENDPOINT_FMT.format(key=key,
                              lat=latitude,
                              long=longitude),
@@ -90,6 +91,8 @@ def get_location(session: requests.Session, key: str, latitude: float,
                                  'flags']),
             'units': 'uk2'
         })
+    response.raise_for_status()
+    return response
 
 
 def assess_location(json_: dict, now: datetime.datetime, begin: datetime.time,
