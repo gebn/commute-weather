@@ -9,7 +9,7 @@ script:
 deploy:
 - provider: lambda
   function_name: commute-weather
-  description: Tells you whether you'll need an umbrella for a regular journey
+  description: Tells you whether you need an umbrella for your commute
   region: us-east-1
   role: arn:aws:iam::158438328645:role/service-role/commute-weather-role
   runtime: python3.6
@@ -22,7 +22,7 @@ deploy:
     branch: latest
 - provider: lambda
   function_name: commute-weather
-  description: Tells you whether you'll need an umbrella for a regular journey
+  description: Tells you whether you need an umbrella for your commute
   region: us-east-1
   role: arn:aws:iam::158438328645:role/service-role/commute-weather-role
   runtime: python3.6
