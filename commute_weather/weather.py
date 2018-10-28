@@ -3,11 +3,10 @@ import logging
 import sys
 import os
 import datetime
-import json
-
-import chump
-import requests
 import pytz
+import json
+import requests
+import boto3
 
 import util
 import darksky
@@ -21,8 +20,9 @@ _NOW = datetime.datetime.now(_TIMEZONE)
 
 _DARK_SKY_SECRET_KEY = os.environ['DARK_SKY_SECRET_KEY']
 
+_NOTIFICATION_TOPIC_ARN = os.environ['NOTIFICATION_TOPIC_ARN']
+_NOTIFICATION_TOPIC_REGION = _NOTIFICATION_TOPIC_ARN.split(':')[3]
 _PUSHOVER_APP_TOKEN = os.environ['PUSHOVER_APP_TOKEN']
-_PUSHOVER_USER_KEY = os.environ['PUSHOVER_USER_KEY']
 
 # at or above this, an umbrella will be recommended
 _SCORE_THRESHOLD = float(os.environ['SCORE_THRESHOLD'])
@@ -30,43 +30,45 @@ _DAY_BEGIN = datetime.time(int(os.environ['DAY_BEGIN_HOUR']), tzinfo=_TIMEZONE)
 _DAY_END = datetime.time(int(os.environ['DAY_END_HOUR']), tzinfo=_TIMEZONE)
 _ROUTE = json.loads(os.environ['ROUTE'])
 
-logging.getLogger('chump').setLevel(logging.INFO)  # chump is very verbose
+_SNS = boto3.client('sns', region_name=_NOTIFICATION_TOPIC_REGION)
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def main() -> int:
+def main() -> None:
+    """
+    Executes the main bulk of this function.
+
+    :raises RuntimeException: If something goes wrong.
+    """
     assert len(_ROUTE) >= 1
 
-    user = chump.Application(_PUSHOVER_APP_TOKEN).get_user(_PUSHOVER_USER_KEY)
     session = requests.session()
 
-    try:
-        umbrella = any(
-            [darksky.assess_location(
-                util.retry_loop(lambda: darksky.get_location(
-                    session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
-                _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
-             for lat, long_ in _ROUTE])
-        logger.debug('Overall result: %s', umbrella)
-    except RuntimeError as e:
-        user.send_message('Weather job failed: {0}'.format(e),
-                          priority=chump.HIGH)
-        return 1
+    umbrella = any(
+        [darksky.assess_location(
+            util.retry_loop(lambda: darksky.get_location(
+                session, _DARK_SKY_SECRET_KEY, lat, long_)).json(),
+            _NOW, _DAY_BEGIN, _DAY_END, _SCORE_THRESHOLD)
+         for lat, long_ in _ROUTE])
+    logger.debug('Overall result: %s', umbrella)
 
-    message = 'You need to take your umbrella...' \
-        if umbrella else 'You don\'t need your umbrella!'
-    forecast_url = 'https://darksky.net/forecast/{lat},{long}/uk224/en' \
-        .format(lat=_ROUTE[0][0], long=_ROUTE[0][1])
-    message = user.send_message(message, url=forecast_url)
-    if not message.is_sent:
-        return 2
-    logger.debug('Successfully sent notification %s', message.id)
-    return 0
+    message = {
+        'app': _PUSHOVER_APP_TOKEN,
+        'body': 'You need to take your umbrella...'
+                if umbrella else 'You don\'t need your umbrella!',
+        'url': f'https://darksky.net/forecast/{_ROUTE[0][0]},{_ROUTE[0][1]}'
+               f'/uk224/en'
+    }
+    response = _SNS.publish(
+        TopicArn=_NOTIFICATION_TOPIC_ARN,
+        Message=json.dumps(message, ensure_ascii=False))
+    logger.info(f"Published message {response['MessageId']}")
 
 
 # noinspection PyUnusedLocal
-def lambda_handler(event, context) -> int:
+def lambda_handler(event, context) -> None:
     """
     AWS Lambda entry point.
     
@@ -76,8 +78,10 @@ def lambda_handler(event, context) -> int:
     :return: The script exit code. 
     """
     logger.info('Event: %s', event)
-    return main()
+    main()
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+    logger.debug('Running outside of Lambda')
+    main()
