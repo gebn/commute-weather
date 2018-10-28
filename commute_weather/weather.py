@@ -67,6 +67,9 @@ def main() -> None:
     if len(_ROUTE) == 0:
         raise RuntimeError('The route must contain at least one location')
 
+    if _NOW.time() > _DAY_END:
+        raise RuntimeError('There are no more working hours today')
+
     session = requests.session()
     samples = itertools.chain.from_iterable(
         filter_samples(
