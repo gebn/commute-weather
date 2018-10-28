@@ -1,4 +1,1 @@
-chump
-pytz
-requests
-boto3
+pipenv
