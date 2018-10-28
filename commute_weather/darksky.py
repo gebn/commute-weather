@@ -7,6 +7,7 @@ import requests
 import util
 
 _ENDPOINT_FMT = 'https://api.darksky.net/forecast/{key}/{lat},{long}'
+_TIMEOUT = 3  # seconds
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -90,7 +91,8 @@ def get_location(session: requests.Session, key: str, latitude: float,
             'exclude': ','.join(['currently', 'minutely', 'daily', 'alerts',
                                  'flags']),
             'units': 'uk2'
-        })
+        },
+        timeout=_TIMEOUT)
     response.raise_for_status()
     return response
 
